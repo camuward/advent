@@ -34,7 +34,7 @@
         shellHook = ''
           rustc -Vv
         '' + pkgs.lib.optionalString pkgs.stdenv.isLinux ''
-          export RUSTFLAGS="-C linker=clang -C link-arg=-fuse-ld=mold $RUSTFLAGS"
+          export RUSTFLAGS="-Clink-arg=-fuse-ld=mold $RUSTFLAGS"
         '';
       };
     };
