@@ -8,3 +8,4 @@ path = "lib.rs"
 
 [dependencies]
 itertools = "0.13"
+lexical-core = "1.0"
