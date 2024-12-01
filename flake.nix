@@ -22,7 +22,7 @@
           rust-bin = inputs.rust-overlay.lib.mkRustBin {} pkgs;
         in [
           pkgs.pkg-config
-          (rust-bin.fromRustupToolchainFile ./rust-toolchain)
+          (rust-bin.fromRustupToolchainFile ./rust-toolchain.toml)
           (pkgs.lib.optionals pkgs.stdenv.isLinux pkgs.mold-wrapped)
         ];
 
