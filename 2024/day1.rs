@@ -1,22 +1,17 @@
-use std::collections::BTreeMap;
+use std::collections::{BTreeMap, BinaryHeap};
 
 use itertools::Itertools;
 
-pub fn part1(input: &str) -> u32 {
-    // split each line into left and right numbers
-    let (mut a, mut b): (Vec<u32>, Vec<u32>) = input
-        .as_bytes()
-        .split(|b| !b.is_ascii_digit())
-        .filter(|s| !s.is_empty())
-        .map(lexical_core::parse)
-        .map(|n: Result<u32, _>| n.expect("encountered non-numeric input"))
+fn nums_per_line(input: &str) -> impl Iterator<Item = (u32, u32)> + '_ {
+    input
+        .split_ascii_whitespace()
+        .map(|s| s.parse().expect("encountered non-numeric input"))
         .tuples()
-        .multiunzip();
+}
 
-    // sort each list
-    a.sort_unstable();
-    b.sort_unstable();
-
+pub fn part1(input: &str) -> u32 {
+    // split each line into list of left and right numbers (sorted)
+    let (a, b): (BinaryHeap<u32>, BinaryHeap<u32>) = nums_per_line(input).unzip();
     // total of distances between each pair
     std::iter::zip(a, b).map(|(a, b)| a.abs_diff(b)).sum()
 }
@@ -24,19 +19,10 @@ pub fn part1(input: &str) -> u32 {
 pub fn part2(input: &str) -> u32 {
     // just a vec of the left numbers
     let mut l_list = vec![];
-
     // count the occurrences of each number on the right
     let mut r_counts = BTreeMap::new();
 
-    let lines = input
-        .as_bytes()
-        .split(|b| !b.is_ascii_digit())
-        .filter(|s| !s.is_empty())
-        .map(lexical_core::parse)
-        .map(|n: Result<u32, _>| n.expect("encountered non-numeric input"))
-        .tuples();
-
-    for (left, right) in lines {
+    for (left, right) in nums_per_line(input) {
         l_list.push(left);
         r_counts.entry(right).and_modify(|count| *count += 1).or_insert(1);
     }
