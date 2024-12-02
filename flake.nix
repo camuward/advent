@@ -26,11 +26,6 @@
           (pkgs.lib.optionals pkgs.stdenv.isLinux pkgs.mold-wrapped)
         ];
 
-        env = {
-          # Required by rust-analyzer
-          # RUST_SRC_PATH = "${rustToolchain}/lib/rustlib/src/rust/library";
-        };
-
         shellHook = ''
           rustc -Vv
         '' + pkgs.lib.optionalString pkgs.stdenv.isLinux ''
